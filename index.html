@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Structure App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital@1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/tree_structure.css">
+</head>
+<body>
+    <div class="createBox1" id="createBox1_Company">
+        <nav class="navbar navbar-light bg-light px-5">
+            <a class="navbar-brand" href="#">
+                <img src="image/image-1.svg" width="40" height="40" class="d-inline-block align-top" alt="">
+                Company Family Structure
+            </a>
+        </nav>
+        <div class="horizontal-Tab row " id="horizontal-Tab">
+            <button class="tablink col text-center" onclick="openPage('Home', this, 'rgb(204,204,204)')"
+                id="defaultOpen">Tab 1</button>
+            <button class="tablink col text-center" onclick="openPage('News', this, 'rgb(204,204,204)')"
+                id="tab2ClickOpen" disabled="true">Tab 2</button>
+        </div>
+        <div id="companyDetail">
+            <div id="Home" class="tabcontent row form-group">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6 form-group px-3">
+                            <label class="font-weight-bold"> Company Name :</label><input
+                                class="inputCompanyDetail form-control my-2" id="InputCompanyName"
+                                placeholder="Company Name">
+                            <label class="font-weight-bold"> Owner Name :</label><input
+                                class="inputCompanyDetail form-control my-2" placeholder="Owner Name">
+                            <label class="font-weight-bold"> Company Website :</label><input
+                                class="inputCompanyDetail form-control my-2" placeholder="Company Website">
+                        </div>
+                        <div class="col-6 form-group px-3">
+                            <div class="my-1 box-label">
+                                <small class="form-text available" id="verificationTextAvailable"> Is
+                                    Available...</small>
+                                <small class="form-text notAvailable" id="verificationTextNotAvailable"> Not
+                                    Available...Please try something else.</small>
+                            </div>
+                            <button class="btn btn-primary btn-md mb-2" id="nameVerificationButton"
+                                onclick="companyNameValidate()">Verify</button><br>
+                            <label class="font-weight-bold"> Phone Number :</label><input
+                                class="inputCompanyDetail form-control my-2" placeholder="Phone Number Name">
+                            <button class="btn btn-primary btn-md my-4 px-4 " id="nextButton">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="News" class="tabcontent">
+                <div class="container">
+                    <div class="row">
+                        <div class="smallVerticalDiv col-2 ">
+                            <button class="btn btn-primary my-2" id="addSibling">Add Sibling</button>
+                            <button class="btn btn-primary my-2 " id="addChild">Add Child</button>
+                            <button class="btn btn-primary my-2 " id="deleteBtn">Delete</button>
+                        </div>
+                        <div class="bigVerticalDiv col-10">
+                            <h5 class="text-center" id="displayCompanyName">Company Name</h5>
+                            <div class="treeGenerate" id="treeGenerateDiv">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-8 " id="tree">
+                                        <ul class="isParent" id="backend" onclick="myFunction(event)">
+                                            <li><span id="companyName">Parent</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary d-flex justify-content-center mx-auto "
+                                id="saveBtn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/tree_structure.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</html>

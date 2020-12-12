@@ -1,0 +1,164 @@
+*{
+  margin:0;
+  padding:0;
+}
+body{
+font-family: 'Open Sans', sans-serif;
+  background-color: rgb(199,238,245);
+}
+.createBox1{
+width:100%;
+height:100%;
+display: block;
+}
+.horizontal-Tab{
+width:101.2%;
+}
+
+/* Style tab links */
+.tablink {
+background-color:rgb(248,249,250);
+color: black;
+float: left;
+border: none;
+outline: none;
+cursor: pointer;
+padding: 14px 16px;
+font-size: 17px;
+width: 50%;
+}
+.tablink:hover {
+background-color: #ddd;
+}
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+color: black;
+display: none;
+padding: 50px 20px;
+min-height:490px;
+/* height: auto; */
+width:100%;
+}
+#Home {background-color: transparent;}
+#News {background-color: transparent;}
+
+.box-label{
+width:98%;
+height:34px;
+}
+.available{
+color:green;
+display:none;
+}
+.notAvailable{
+color:red;
+display: none;
+}
+.inputWrong{
+border:1px solid red;
+}
+.inputCorrect{
+border:1px solid green;
+}
+.markContainer{
+  width:100vw;
+  min-height:590px;
+  height:90vw;
+  background-color: rgba(10, 10, 10, 0.7);
+  position: absolute;
+  top:0;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+  z-index: 100;
+}
+.markContent{
+  width:800px;  
+  min-height:350px;
+  height:auto;
+  background-color: white;
+  border-radius: 4px;
+  padding:20px;
+  text-align: center;  
+  position: relative;
+  padding-bottom:60px;
+  font-size: 14px;
+}
+.close{
+  transform: rotate(45deg);
+}  
+.treeGenerate{
+  width:100%;
+  min-height:300px;
+}
+.messageDisplayBox{
+  width:100%;
+  height:150px;
+  color:green;
+  border:1px solid green;
+  border-radius: 7px;
+  background-color: lightgreen;
+  text-shadow: .5px .5px 0 #000;
+}
+.hidden{
+  display:none;
+}
+/* Tree Structure */
+#backend{
+list-style:none;
+}
+#backend .caret {
+position: relative;
+font-size: 1em;
+cursor: pointer;
+}
+#backend .caret-down {
+position: relative;
+cursor: pointer;
+/* transform: rotate(90deg); */
+}
+#backend .caret:before {
+content: '\25B8';
+display: inline-block;
+font-size: 17px;
+transform: rotate(90deg);
+}
+#backend .caret-down:before {
+content: '\25B8';
+display: inline-block;
+font-size: 17px;
+/* transform: rotate(90deg); */
+}
+#backend ul {
+list-style:none;
+border-left: 1px solid black;
+padding: 0;
+margin: 0;
+padding-left: 35px;
+}
+#backend ul li {
+position: relative;
+text-transform: capitalize;
+}
+#backend ul li:before {
+content: '';
+position: absolute;
+top: 12px;
+left: -35px;
+background: black;
+height: 1px;
+width: 32px;
+}
+.nested {
+display: block;
+}
+.active {
+display: none;
+}
+.edit{
+background-Color: transparent;
+}
+.edit:hover{
+background-color: rgba(0,0,0,0.2);
+}
