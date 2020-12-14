@@ -132,13 +132,14 @@ function myFunction(event) {
   }
   let createSibling = document.getElementById("addSibling");
   createSibling.addEventListener("click", function(){
-    debugger;
+
     if ((spart.className == "edit" || spart.className == "edit caret-down" || spart.className == "edit caret-down caret") && spart.parentElement !== null && spart.style.backgroundColor === "yellow") {
       spart.style.backgroundColor = "#ffffff00";
       let parentLi = spart.parentElement;
       if (parentLi.parentElement !== null) {
         let parentUl = parentLi.parentElement;
-        if (parentUl.className == "nested") {
+        if (parentUl.className == "nested" || parentUl.className == "createUl nested") {
+      
           clickChidSibling(parentUl);
         }
       }
@@ -208,7 +209,6 @@ function editText() {
 //8.2.1 Blur Event For Input Value
 function blurEvent() {
   let inputForm = document.getElementById("inputForm"); 
-  debugger;
   let assignCode = keyPress(inputForm);
   if(assignCode === false){
     inputForm.addEventListener("focusout",function(){    
@@ -220,7 +220,6 @@ function blurEvent() {
   }
 } 
 function keyPress(inputForm){
-  debugger;
   assignCode = false;
   inputForm.addEventListener("keyup",function(e){    
     if(e.keyCode === 13){
@@ -232,7 +231,7 @@ function keyPress(inputForm){
 return assignCode;
 }
 // function addListenerMulti(el, s) {
-//   debugger;
+// 
 //   s.split(' ').forEach(e => {
 //     el.addEventListener(e, function(){
 //         if(this.keyCode === 13 || (ehis.type === blur && this.value !== null && this.value !== "")){
