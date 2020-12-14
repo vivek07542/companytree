@@ -132,7 +132,8 @@ function myFunction(event) {
   }
   let createSibling = document.getElementById("addSibling");
   createSibling.addEventListener("click", function(){
-    if ((spart.className == "edit" || spart.className == "edit caret-down") && spart.parentElement !== null && spart.style.backgroundColor === "yellow") {
+    debugger;
+    if ((spart.className == "edit" || spart.className == "edit caret-down" || spart.className == "edit caret-down caret") && spart.parentElement !== null && spart.style.backgroundColor === "yellow") {
       spart.style.backgroundColor = "#ffffff00";
       let parentLi = spart.parentElement;
       if (parentLi.parentElement !== null) {
@@ -161,7 +162,7 @@ function myFunction(event) {
   });
   let deleteBtn = document.getElementById("deleteBtn");
   deleteBtn.addEventListener("click", function () {
-    if ((spart.className == "edit" || spart.className == "edit caret-down") && spart.parentElement !== null && spart.style.backgroundColor === "yellow"){
+    if ((spart.className == "edit" || spart.className == "edit caret-down" || spart.className == "edit caret-down caret") && spart.parentElement !== null && spart.style.backgroundColor === "yellow"){
       let parentLiElement = spart.parentElement;
       let ulElement = parentLiElement.parentElement;
       if (parentLiElement.childElementCount === 1) {
@@ -198,7 +199,7 @@ function editText() {
       if (inputLength == 0) {
         let html = this.innerText;
         this.innerText = "";
-        this.innerHTML = `<input id="inputForm" value = "${html}"> </input>`;
+        let inputText = createElements(this, "input", "inputForm", "inputForm", null,html,null);
       };
       blurEvent();
     });
@@ -206,31 +207,57 @@ function editText() {
 }
 //8.2.1 Blur Event For Input Value
 function blurEvent() {
-  let inputForm = document.getElementById("inputForm");  
-  blurCall(inputForm );
-  keyCode(inputForm);
-}
-function blurCall(inputForm){
-inputForm.addEventListener("blur",function(){
-    let parentElem = this.parentElement;
-    if (inputForm.value !== null) {
-      parentElem.innerHTML = inputForm.value;
-    }  
+  let inputForm = document.getElementById("inputForm"); 
+  debugger;
+  let assignCode = keyPress(inputForm);
+  if(assignCode === false){
+    inputForm.addEventListener("focusout",function(){    
+      let parentElem = this.parentElement;
+      if (inputForm.value !== null && parentElem !== null && inputForm.value !== ""){
+        parentElem.innerHTML = this.value;
+      }
+  });  
+  }
+} 
+function keyPress(inputForm){
+  debugger;
+  assignCode = false;
+  inputForm.addEventListener("keyup",function(e){    
+    if(e.keyCode === 13){
+        assignCode = true;
+        let parentElem = this.parentElement;
+        parentElem.innerHTML = this.value;
+    }     
 });
+return assignCode;
 }
-function keyCode(inputForm){
-  inputForm.addEventListener("keyup",function(e){
-    if(e.keyCode === 13){      
-      let span = this.parentElement;
-      span.innerHTML = inputForm.value;
-    }
-  });
-}
+// function addListenerMulti(el, s) {
+//   debugger;
+//   s.split(' ').forEach(e => {
+//     el.addEventListener(e, function(){
+//         if(this.keyCode === 13 || (ehis.type === blur && this.value !== null && this.value !== "")){
+//           let parentElem = this.parentElement;
+//           parentElem.innerHTML = inputForm.value;
+//         }
+//     });
+//   });
+// }
+
+// function addListenerMulti(element, eventNames, listener) {
+//   var events = eventNames.split(' ');
+//   for (var i=0, iLen=events.length; i<iLen; i++) {
+//     element.addEventListener(events[i], listener, false);
+//   }
+// }
+
+// addListenerMulti(inputForm, 'keyup blur', function()); 
+
+
 //  8.3 Function For Button Child Sibling Click
 function clickChidSibling(parent){
   let childLi = createElements(parent, "li", null, null, null,null,null);
   let childSpan = createElements(childLi, "span", "edit", null, null,null,null);
-  let childInput = createElements(childSpan, "input", "inputForm", "inputForm", null,"Sibling",null);
+  let childInput = createElements(childSpan, "input", "inputForm", "inputForm", null,null,null);
   editText();
   blurEvent();
 }
