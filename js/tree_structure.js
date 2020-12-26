@@ -1,21 +1,8 @@
-var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+var pattern = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
 var companyDetailsFromStorage = JSON.parse(localStorage.getItem("companyDetailsFromStorage"));
-// function For Storage in Local Storage
-function setDetailOfAdmin() {
-  if (localStorage.getItem("companyDetailsFromStorage") === null) {
-    let userArrayDetail = [];
-    let userDetail = {
-      companyname: "Pradeep and Company",
-      ownername: "Vivek Bindal",
-      website: "vivek@gmail.com",
-      phonenumber: 8888269609,
-      companytree: "",
-    };
-    userArrayDetail.push(userDetail);
-    localStorage.setItem("companyDetailsFromStorage", JSON.stringify(userArrayDetail));
-  }
-}
-// Function For Horizontal Tab....
+// 1. Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+// 2. Function For Horizontal Tab click open....
 function openPage(pageName, elmnt, color) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
@@ -30,13 +17,26 @@ function openPage(pageName, elmnt, color) {
   elmnt.style.backgroundColor = color;
   setDetailOfAdmin();
 }
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
-// function For Validate Company Name
+// 3.function For Storage in Local Storage
+function setDetailOfAdmin() {
+  if (localStorage.getItem("companyDetailsFromStorage") === null) {
+    let userArrayDetail = [];
+    let userDetail = {
+      companyname: "Pradeep and Company",
+      ownername: "Vivek Bindal",
+      website: "vivek@gmail.com",
+      phonenumber: 8888269609,
+      companytree: "",
+    };
+    userArrayDetail.push(userDetail);
+    localStorage.setItem("companyDetailsFromStorage", JSON.stringify(userArrayDetail));
+  }
+}
+// 4. function For Varification Company Name from local storage
 function companyNameValidate() {
   verifyCompanyFromStorage();
 }
-// function For Company Name Verification
+// 5. function For Company Name Verification
 function verifyCompanyFromStorage() {
   let InputCompanyName = document.getElementById("InputCompanyName");
   let isValidateCompanyName = true;
@@ -54,7 +54,7 @@ function verifyCompanyFromStorage() {
   });
   return isValidateCompanyName;
 }
-// Function For Next Button Click
+// 6. Function For Next Button Click
 let nextButton = document.getElementById("nextButton");
 nextButton.addEventListener("click", function () {
   let inputCompanyData = document.querySelectorAll(".inputCompanyDetail");
@@ -63,7 +63,7 @@ nextButton.addEventListener("click", function () {
     document.getElementById("tab2ClickOpen").click();
   };
 });
-// Function For Validate
+// 7.Function For Validate
 function validation(element) {
   let trueArray = [];
   let isAllValidationPassed = true;
@@ -73,14 +73,15 @@ function validation(element) {
   isAllValidationPassed = trueArray.every(checkBoolean);
   return isAllValidationPassed;
 }
-// Check All Validatation Array
+// 7.1 Check All Validatation Array
 function checkBoolean(elem) {
   return elem === true;
 }
-// General Function for Validation
+// 7.2 General Function for Validation
 function genericTextboxValidator(input, index, trueArray) {
   let isValid = true;
   if (input.value.trim() === "") {
+    input.classList.remove("inputCorrect");
     input.classList.add("inputWrong");
     isValid = false;
   }
@@ -91,77 +92,95 @@ function genericTextboxValidator(input, index, trueArray) {
   }
   else if (index == 3) {
     if (input.value.length !== 10) {
+      input.classList.remove("inputCorrect");
       input.classList.add("inputWrong");
       isValid = false;
     }
     else {
+      input.classList.remove("inputWrong");
       input.classList.add("inputCorrect");
     }
   }
   else if (index == 2) {
     if (input.value.match(pattern)) {
+      input.classList.remove("inputWrong");
       input.classList.add("inputCorrect");
     }
     else {
+      input.classList.remove("inputCorrect");
       input.classList.add("inputWrong");
       isValid = false;
     }
   }
   else {
+    input.classList.remove("inputWrong");
     input.classList.add("inputCorrect");
   }
   trueArray.push(isValid);
   return trueArray;
 }
-// Tree Structure JS
+// 8.Tree Structure for Company On Click Event of Sibling & Child
 let backend = document.getElementById("backend");
 function myFunction(event) {
+  let spanInBranch = document.getElementsByTagName("span");
+  for(i=0;i<spanInBranch.length;i++){
+    spanInBranch[i].style.backgroundColor = "#ffffff00";
+  }
+  var spart = event.target;  
+  if(spart.nodeName === "SPAN" && document.getElementById("inputForm") == null){
+    spart.style.backgroundColor = "yellow";
+  }
   let createSibling = document.getElementById("addSibling");
-  createSibling.addEventListener("click", function () {
-    var spart = event.target;
-    if ((spart.className == "edit" || spart.className == "edit caret-down") && spart.parentElement !== null) {
-      let parentLi = spart.parentElement
+  createSibling.addEventListener("click", function(){
+
+    if ((spart.className == "edit" || spart.className == "edit caret-down" || spart.className == "edit caret-down caret") && spart.parentElement !== null && spart.style.backgroundColor === "yellow") {
+      spart.style.backgroundColor = "#ffffff00";
+      let parentLi = spart.parentElement;
       if (parentLi.parentElement !== null) {
         let parentUl = parentLi.parentElement;
-        if (parentUl.className == "nested") {
-          parentUl.innerHTML += `<li><span class="edit"> Sibling </span></li>`;
-          editText();
+        if (parentUl.className == "nested" || parentUl.className == "createUl nested") {
+      
+          clickChidSibling(parentUl);
         }
       }
     }
+    else if(spart === document.getElementById("companyName") && spart.style.backgroundColor === "yellow" ){
+      spart.style.backgroundColor = "#ffffff00";
+      alert("You Cannot Create Sibling To The Company Name");
+    }
   });
-  // Create Child Button Click
   let createChild = document.getElementById("addChild");
-  createChild.addEventListener("click", function () {
-    var spart = event.target;
+  createChild.addEventListener("click", function(){
     let parentLi = spart.parentElement;
-    if (parentLi !== null) {
-      parentLi.innerHTML += `<ul class='nested'><li><span class="edit">Child</span></li></ul>`;
-      let spanTag = parentLi.firstChild;
+    if (parentLi !== null && spart.style.backgroundColor === "yellow") {
+      spart.style.backgroundColor = "#ffffff00";
+      let childUl = createElements(parentLi, "ul", "nested", null, null,null,null);
+      clickChidSibling(childUl);
+      let spanTag = parentLi.firstChild;      
       spanTag.classList.add("caret-down");
       spanTag.setAttribute("onClick", "caret()");
-      editText();
     }
   });
   let deleteBtn = document.getElementById("deleteBtn");
   deleteBtn.addEventListener("click", function () {
-    let spart = event.target;
-    let parentElement = spart.parentElement;
-    let ulElement = parentElement.parentElement;
-    if (parentElement.childElementCount === 1) {
-      if (backend.childElementCount === 1) {
-        parentElement.remove();
+    if ((spart.className == "edit" || spart.className == "edit caret-down" || spart.className == "edit caret-down caret") && spart.parentElement !== null && spart.style.backgroundColor === "yellow"){
+      let parentLiElement = spart.parentElement;
+      let ulElement = parentLiElement.parentElement;
+      if (parentLiElement.childElementCount === 1) {
+        if (backend.childElementCount === 1) {
+          parentLiElement.remove();
+        }
+        else {
+          ulElement.remove();
+        }
       }
       else {
-        ulElement.remove();
-      }
-    }
-    else {
-      parentElement.remove();
+        parentLiElement.remove();
+      }  
     }
   });
 }
-// Caret Toggele Function
+//8.1. Caret Toggele Function
 function caret() {
   let carets = document.getElementsByClassName("caret-down");
   for (i = 0; i < carets.length; i++) {
@@ -172,7 +191,7 @@ function caret() {
     });
   }
 }
-// Edit Text
+// 8.2 Edit Text
 function editText() {
   let editText = document.getElementsByClassName("edit");
   for (i = 0; i < editText.length; i++) {
@@ -181,23 +200,73 @@ function editText() {
       if (inputLength == 0) {
         let html = this.innerText;
         this.innerText = "";
-        this.innerHTML = `<input id="inputForm" value = "${html}"> </input>`;
+        let inputText = createElements(this, "input", "inputForm", "inputForm", null,html,null);
       };
       blurEvent();
     });
   }
 }
-// Blur Event For Input Value
+//8.2.1 Blur Event For Input Value
 function blurEvent() {
-  let inputForm = document.getElementById("inputForm");
-  inputForm.addEventListener("blur", function () {
-    let parentElem = this.parentElement;
-    if (inputForm.value !== null) {
-      parentElem.innerHTML = inputForm.value;
-    }
-  });
+  let inputForm = document.getElementById("inputForm"); 
+  let assignCode = keyPress(inputForm);
+  if(assignCode === false){
+    inputForm.addEventListener("focusout",function(){    
+      let parentElem = this.parentElement;
+      if (inputForm.value !== null && parentElem !== null && inputForm.value !== ""){
+        parentElem.innerHTML = this.value;
+      }
+  });  
+  }
+} 
+function keyPress(inputForm){
+  assignCode = false;
+  inputForm.addEventListener("keyup",function(e){    
+    if(e.keyCode === 13){
+        assignCode = true;
+        let parentElem = this.parentElement;
+        parentElem.innerHTML = this.value;
+    }     
+});
+return assignCode;
 }
-// Fetching Company Details
+// function addListenerMulti(el, s) {
+// 
+//   s.split(' ').forEach(e => {
+//     el.addEventListener(e, function(){
+//         if(this.keyCode === 13 || (ehis.type === blur && this.value !== null && this.value !== "")){
+//           let parentElem = this.parentElement;
+//           parentElem.innerHTML = inputForm.value;
+//         }
+//     });
+//   });
+// }
+
+// function addListenerMulti(element, eventNames, listener) {
+//   var events = eventNames.split(' ');
+//   for (var i=0, iLen=events.length; i<iLen; i++) {
+//     element.addEventListener(events[i], listener, false);
+//   }
+// }
+
+// addListenerMulti(inputForm, 'keyup blur', function()); 
+
+
+//  8.3 Function For Button Child Sibling Click
+function clickChidSibling(parent){
+  let childLi = createElements(parent, "li", null, null, null,null,null);
+  let childSpan = createElements(childLi, "span", "edit", null, null,null,null);
+  let childInput = createElements(childSpan, "input", "inputForm", "inputForm", null,null,null);
+  editText();
+  blurEvent();
+}
+//9 Save Button Click Event
+let saveBtn = document.getElementById("saveBtn");
+saveBtn.addEventListener("click", function () {
+  companyDetails();
+  setTimeout(function () { document.location.href = "post.html"; }, 3000);
+});
+//9.1 Fetching Company Details
 function companyDetails() {
   let backend = document.getElementById("backend");
   let inputCompanyData = document.querySelectorAll(".inputCompanyDetail");
@@ -205,7 +274,6 @@ function companyDetails() {
   let parentLevel = 0;
   let arrayForCompany = arrayMaking(backend, count, parentLevel);
   let userObject = {};
-
   userObject.companyname = inputCompanyData[0].value;
   userObject.ownername = inputCompanyData[1].value;
   userObject.website = inputCompanyData[2].value;
@@ -222,37 +290,7 @@ function companyDetails() {
   userArray.push(userObject);
   localStorage.setItem("companyDetailsFromStorage", JSON.stringify(userArray));
 }
-// Save Button Click Event
-let saveBtn = document.getElementById("saveBtn");
-saveBtn.addEventListener("click", function () {
-  companyDetails();
-  setTimeout(function () { document.location.href = "post.html"; }, 3000);
-});
-// If Window load from Company Structure.
-window.addEventListener('load', function () {
-  let companyDetailsFromStorage = JSON.parse(localStorage.getItem("companyDetailsFromStorage"));
-  let array = [];
-  companyDetailsFromStorage.forEach(elem => {
-    if (elem.editable === true) {
-      let backend = document.getElementById("backend");
-      backend.innerHTML = "";
-      document.getElementById("tab2ClickOpen").disabled = false;
-      document.getElementById("tab2ClickOpen").click();
-      let inputCompanyDetails = document.querySelectorAll(".inputCompanyDetail");
-      inputCompanyDetails[0].value = elem.companyname;
-      inputCompanyDetails[1].value = elem.ownername;
-      inputCompanyDetails[2].value = elem.website;
-      inputCompanyDetails[3].value = elem.phonenumber;
-      document.getElementById("displayCompanyName").innerText = elem.companyname;
-      extractTree(elem.companytree, backend);
-      delete elem.editable;
-    }
-    array.push(elem);
-  });
-  localStorage.setItem("companyDetailsFromStorage", JSON.stringify(array));
-  editText();
-});
-// Function to append children to create array 
+// 9.2 Function to append children to create array 
 function arrayMaking(parent, count, parentLevel) {
   let arrayCompany = [];
   if (parent.hasChildNodes() === true) {
@@ -281,7 +319,31 @@ function arrayMaking(parent, count, parentLevel) {
   }
   return arrayCompany;
 }
-// Function To create Tree Structure of called value 
+//10 If Window load from Company Structure.
+window.addEventListener('load', function () {
+  let companyDetailsFromStorage = JSON.parse(localStorage.getItem("companyDetailsFromStorage"));
+  let array = [];
+  companyDetailsFromStorage.forEach(elem => {
+    if (elem.editable === true) {
+      let backend = document.getElementById("backend");
+      backend.innerHTML = "";
+      document.getElementById("tab2ClickOpen").disabled = false;
+      document.getElementById("tab2ClickOpen").click();
+      let inputCompanyDetails = document.querySelectorAll(".inputCompanyDetail");
+      inputCompanyDetails[0].value = elem.companyname;
+      inputCompanyDetails[1].value = elem.ownername;
+      inputCompanyDetails[2].value = elem.website;
+      inputCompanyDetails[3].value = elem.phonenumber;
+      document.getElementById("displayCompanyName").innerText = elem.companyname;
+      extractTree(elem.companytree, backend);
+      delete elem.editable;
+    }
+    array.push(elem);
+  });
+  localStorage.setItem("companyDetailsFromStorage", JSON.stringify(array));
+  editText();
+});
+//10.1 Function To create Tree Structure of called value 
 function extractTree(arrayTree, html) {
   arrayTree.forEach(elem => {
     // Create Li and append to Ul.
@@ -306,4 +368,25 @@ function extractTree(arrayTree, html) {
       }
     }
   });
+}
+// 11. Function To Create Something
+function createElements(parentName, formType, className, idName, childInnerText,childValue,childName) {
+  let childrenName = document.createElement(formType);
+  if (className !== null) {
+      childrenName.setAttribute("class", className);
+  }
+  if (idName !== null) {
+      childrenName.setAttribute("id", idName);
+  }
+  if(childValue !==null){
+    childrenName.value = childValue;
+  }
+  if (childInnerText !== null) {
+      childrenName.innerText = childInnerText;
+  }
+  if(childName !== null){
+    childrenName.setAttribute("name",childName);
+  }
+  parentName.appendChild(childrenName);
+  return childrenName;
 }

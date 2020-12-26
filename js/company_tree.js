@@ -1,56 +1,65 @@
 var companyDetailsFromStorage = JSON.parse(localStorage.getItem("companyDetailsFromStorage"));
 var companyDetails = JSON.parse(localStorage.getItem("companyDetails"));
-// Message Display for 10 sec
+// 1. Message Display for 10 sec
 let messageDisplayBox = document.getElementById("messageDisplayBox");
 let textMessageDisplay = document.getElementById("textMessageDisplay");
 textMessageDisplay.innerText = "Your Data Saved For The " + companyDetails.companyname;
-// Function to hide Message after 10 sec
+// 2. Function to hide Message after 10 sec
 function hideLoadingDiv() {
   setTimeout(function () {
     messageDisplayBox.classList.add('hidden');
   }, 10000)
 }
-// Create Table 
+// 3. Create Table 
 let headers = ["Company Name", "Owner Name", "Company Website", "Company Contact", "Action"];
 let table = document.getElementById("tblData");
-let tableHead = document.createElement("thead");
-let headerRow = document.createElement("tr");
-headerRow.setAttribute("scope", "row")
+let tableHead =  createElements(table, "thead", null, null, null,null,null,null); 
+let headerRow = createElements(tableHead, "tr", null, null, null,null,null,"row");
 headers.forEach(headerText => {
-  let header = document.createElement("th");
-  header.setAttribute("scope", "col")
+  let header = createElements(headerRow, "th", null, null, null,null,null,"col");
   let textNode = document.createTextNode(headerText);
   header.appendChild(textNode);
-  headerRow.appendChild(header);
-  tableHead.appendChild(headerRow);
 });
-table.appendChild(tableHead);
-let tableBody = document.createElement("tbody");
+let tableBody = createElements(table, "tbody", null, null, null,null,null,null);
 if (companyDetailsFromStorage !== null) {
   companyDetailsFromStorage.forEach(per => {
-    let row = document.createElement("tr");
-    row.setAttribute("scope", "row")
+    let row = createElements(tableBody, "tr", null, null, null,null,null,"row");
     Object.values(per).forEach(text => {
-      let cell = document.createElement("td");
-      cell.setAttribute("scope", "col");
       if (text !== per.companytree) {
+        let cell = createElements(row, "td", null, null, null,null,null,"col");
         let textNode = document.createTextNode(text);
         cell.appendChild(textNode);
-        row.appendChild(cell);
       }
     })
-    let cellBtn = document.createElement("td");
-    cellBtn.setAttribute("id", "action");
-    let showTreeBtn = document.createElement("button");
-    showTreeBtn.setAttribute("class", "btn btn-primary showTreeBtn");
-    showTreeBtn.innerText = "Show/Edit Tree";
-    cellBtn.appendChild(showTreeBtn);
-    row.appendChild(cellBtn);
-    tableBody.appendChild(row);
-    table.appendChild(tableBody);
+    let cellBtn = createElements(row, "td", null, "action", null,null,null,null); 
+    let showTreeBtn = createElements(cellBtn, "button", "btn btn-primary showTreeBtn",  null,"Show/Edit Tree",null,null,"col")
   });
 };
-// Show Tree on Show button
+// 4. Element Create Function
+function createElements(parentName, formType, className, idName, childInnerText,childValue,childName,childScope) {
+  let childrenName = document.createElement(formType);
+  if (className !== null) {
+      childrenName.setAttribute("class", className);
+  }
+  if (idName !== null) {
+      childrenName.setAttribute("id", idName);
+  }
+  if(childScope !== null){
+    childrenName.setAttribute("scope",childScope);
+  }  
+  if(childValue !==null){
+    childrenName.value = childValue;
+  }
+  if (childInnerText !== null) {
+      childrenName.innerText = childInnerText;
+  }
+  if(childName !== null){
+    childrenName.setAttribute("name",childName);
+  }
+  parentName.appendChild(childrenName);
+  return childrenName;
+}
+//5. Show Tree on Click of Show/Edit button
 let showTreeBtn = document.getElementsByClassName("showTreeBtn");
 for (i = 0; i < showTreeBtn.length; i++) {
   showTreeBtn[i].addEventListener("click", function () {
@@ -62,14 +71,14 @@ for (i = 0; i < showTreeBtn.length; i++) {
         let markContainer = document.getElementById("markContainer");
         markContainer.style.display = "flex";
         let companyTree = e.companytree;
-        extractTree(companyTree, backend);
+        extractTree(companyTree, backend);        
         let companyName = document.getElementById("companyName");
         companyName.innerText = e.companyname;
-
       }
     });
   });
 }
+// 6.Extract from Array and create HTML Structure
 function extractTree(arrayTree, html) {
   arrayTree.forEach(elem => {
     // Create Li and append to Ul.
@@ -82,24 +91,33 @@ function extractTree(arrayTree, html) {
             let lastLi = parentLi[parentLi.length - 1];
             let spanTag = lastLi.firstChild;
             spanTag.classList.add("caret-down");
+            spanTag.setAttribute("onclick","caret()");
             lastLi.innerHTML += `<ul class ="createUl nested" name="${element.name}"> </ul>`;
             let parentUl = document.getElementsByClassName("createUl");
             let lastUl = parentUl[parentUl.length - 1];
             if (element.children.length !== 0) {
               extractTree(element.children, lastUl)
             }
-            caret();
           }
         });
       }
     }
   });
 }
-
-// Edit Click Button on Popup
+//7. caret Toggle Function
+function caret() {
+  let carets = document.getElementsByClassName("caret-down");
+  for (i = 0; i < carets.length; i++) {
+    carets[i].addEventListener("click", function () {
+      this.classList.toggle('caret');
+      parent = this.parentElement;
+      parent.querySelector('.nested').classList.toggle('active')
+    });
+  }
+}
+//8.  Edit Click Button on Popup
 let editBtn = document.getElementById("editBtn");
 editBtn.addEventListener("click", function () {
-  // var companyDetails = JSON.parse(localStorage.getItem("companyDetails"));
   var companyDetailsFromStorage = JSON.parse(localStorage.getItem("companyDetailsFromStorage"));
   let companyName = document.getElementById("companyName");
   let array = [];
@@ -118,18 +136,7 @@ editBtn.addEventListener("click", function () {
   localStorage.setItem("companyDetailsFromStorage", JSON.stringify(array));
   setTimeout(function () { document.location.href = "index.html"; }, 3000);
 });
-// caret Toggle Function
-function caret() {
-  let carets = document.getElementsByClassName("caret-down");
-  for (i = 0; i < carets.length; i++) {
-    carets[i].addEventListener("click", function () {
-      this.classList.toggle('caret');
-      parent = this.parentElement;
-      parent.querySelector('.nested').classList.toggle('active')
-    });
-  }
-}
-// Close Button For Popup
+//9. Close Button For Popup
 closeDynamic.addEventListener("click", function () {
   markContainer.style.display = "none";  
 });
